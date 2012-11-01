@@ -1,0 +1,128 @@
+#!/bin/sh
+
+### BEGIN INIT INF
+# Provides:         logstash
+# Required-Start:   $all
+# Required-Stop:    $all
+# Default-Start:    2 3 4 5
+# Default-Stop:     0 1 6
+# Short-Description: Starts logstash services
+# chkconfig: 2345 80 15
+# Description: Logstash services
+### END INIT INFO
+
+BASENAME=$(basename $0)
+SERVICE=$(echo $BASENAME | sed "s/.*logstash-//")
+
+USER=logstash
+GROUP=logstash
+JARFILE=/usr/share/logstash/logstash-monolithic.jar
+CONFIG=/etc/logstash/$SERVICE.conf
+PATTERNS=/etc/logstash/patterns
+PLUGINS=/etc/logstash/plugins
+PIDDIR=/var/run/logstash
+PIDFILE=$PIDDIR/$SERVICE.pid
+LOGDIR=/var/log/logstash
+LOGFILE=$LOGDIR/$SERVICE.log
+JAVA_MEM="256M"
+JAVA_OPTS="-Xmx$JAVA_MEM -Xms$JAVA_MEM"
+START_STOP_OPTS=""
+ARGS=""
+SLEEP=3
+
+[ -f /etc/sysconfig/$BASENAME ] && . /etc/sysconfig/$BASENAME
+[ -f /etc/default/$BASENAME ] && . /etc/default/$BASENAME
+
+DAEMON=$(which java)
+DAEMON_OPTS="$JAVA_OPTS -jar $JARFILE $SERVICE -f $CONFIG -l $LOGFILE -p $PLUGINS --grok-patterns-path $PATTERNS $ARGS"
+
+if test ! -d "$LOGDIR" ; then
+    mkdir -p $LOGDIR
+    chown $USER:$GROUP $LOGDIR
+fi
+
+if test ! -d "$PIDDIR" ; then
+    mkdir -p $PIDDIR
+fi
+
+__check_logstash() {
+    if test -e "$PIDFILE" ; then
+        DAEMON_PID=$(cat $PIDFILE)
+        if test -n "$DAEMON_PID" ; then
+            DAEMON_EXIST=$(ps $DAEMON_PID | grep logstash)
+        fi
+    fi
+}
+
+__start() {
+    echo -n "Starting ${BASENAME}: "
+
+    if test -z "$DAEMON_EXIST" ; then
+        su -s /bin/sh -c 'exec "$0" "$@"' $USER -- $DAEMON $DAEMON_OPTS &
+        sleep $SLEEP
+
+        PID=`ps -ef | grep "^$USER" | grep "$JARFILE $SERVICE -f $CONFIG" | awk '{print $2}'`
+
+        if test "x$PID" = "x" ; then
+            echo "logstash failed to start"
+            RETVAL=1
+        else
+            echo $PID >$PIDFILE
+            echo "logstash started successfully, PID $PID"
+            RETVAL=0
+        fi
+    else
+        echo "logstash already running"
+        RETVAL=0
+    fi
+}
+
+__stop() {
+    echo -n "Stopping ${BASENAME}: "
+    if test -z "$DAEMON_EXIST" ; then
+        echo "logstash not running"
+        RETVAL=0
+    else
+        kill -15 $DAEMON_PID
+        sleep $SLEEP
+        __check_logstash
+
+        if test -z "$DAEMON_EXIST" ; then
+            echo "logstash stopped successfully"
+            RETVAL=0
+            rm -f ${PIDFILE}
+        else
+            echo "logstash was not stopped successfully, PID $DAEMON_PID"
+            RETVAL=1
+        fi
+    fi
+    return $RETVAL
+}
+
+__status() {
+    echo -n "Status ${BASENAME}: "
+    if test -z "$DAEMON_EXIST" ; then
+        echo "logstash is not running"
+        RETVAL=1
+    else
+        echo "logstash is running, PID $DAEMON_PID"
+        RETVAL=0
+    fi
+}
+
+__usage() {
+    echo "Usage: $BASENAME {start|stop|restart}"
+    RETVAL=1
+}
+
+__check_logstash
+
+case "$1" in
+    start   ) __start ;;
+    stop    ) __stop ;;
+    status  ) __status ;;
+    restart ) __stop && __start ;;
+    *       ) __usage ;;
+esac
+
+exit $RETVAL
