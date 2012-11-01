@@ -1,6 +1,6 @@
-# logstash-pkgm
+# logstash-pkgs
 
-logstash-pkgm contains simple files to build a RPM from a spec file.
+logstash-pkgs contains simple files to build a RPM from a spec file.
 
 ## Creating RPM
 Just copy the following files to the SOURCES directory:
