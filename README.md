@@ -13,7 +13,7 @@ Just copy the following files to the SOURCES directory:
 
 Do not forget to download logstash to the SOURCES directory:
 
-    http://semicomplete.com/files/logstash/logstash-1.1.1-monolithic.jar
+    http://semicomplete.com/files/logstash/logstash-1.1.5-monolithic.jar
 
 Then copy the following file to the SPECS directory:
 
