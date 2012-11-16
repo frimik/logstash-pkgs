@@ -7,7 +7,7 @@ Group: System Environment/Daemons
 Distribution: RHEL and CentOS
 URL: http://logstash.net
 
-Source0: http://semicomplete.com/files/logstash/%{name}-%{version}-monolithic.jar
+Source0: http://logstash.objects.dreamhost.com/release/%{name}-%{version}-monolithic.jar
 Source1: logstash-agent.init
 Source2: logstash-agent.conf
 Source3: logstash-agent.defaults
