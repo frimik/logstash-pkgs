@@ -73,6 +73,8 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(0640, root, root) %{defaults}/logstash-agent
 
 %changelog
+* Thu Nov 29 2012 Jonny Schulz <js@bloonix.net> - 1.1.5-2
+- Replaced JAVA_MEM with JAVA_MEM_MIN and JAVA_MEM_MAX.
 * Thu Nov 13 2012 Jonny Schulz <js@bloonix.net> - 1.1.5-1
 - Logstash 1.1.5 released at 2012-11-10. Big thanks to Jordan.
 * Thu Oct 22 2012 Jonny Schulz <js@bloonix.net> - 1.1.1-2
