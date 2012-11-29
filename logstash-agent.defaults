@@ -6,6 +6,7 @@
 #PLUGINS=/etc/logstash/plugins
 #LOGDIR=/var/log/logstash
 #LOGFILE=$LOGDIR/$SERVICE.log
-#JAVA_MEM="256M"
-#JAVA_OPTS="-Xmx$JAVA_MEM -Xms$JAVA__MEM"
+#JAVA_MEM_MIN="256M"
+#JAVA_MEM_MAX="256M"
+#JAVA_OPTS=""
 #ARGS=""
