@@ -1,7 +1,7 @@
 Summary: logstash is a tool for managing events and logs.
 Name: logstash
 Version: 1.1.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Apache 2.0
 Group: System Environment/Daemons
 Distribution: RHEL and CentOS
