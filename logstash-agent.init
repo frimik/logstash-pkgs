@@ -26,7 +26,6 @@ LOGDIR=/var/log/logstash
 LOGFILE=$LOGDIR/$SERVICE.log
 JAVA_MEM_MIN="128M"
 JAVA_MEM_MAX="256M"
-JAVA_OPTS="-Xmx$JAVA_MEM -Xms$JAVA_MEM"
 START_STOP_OPTS=""
 ARGS=""
 SLEEP=3
@@ -34,6 +33,7 @@ SLEEP=3
 [ -f /etc/sysconfig/$BASENAME ] && . /etc/sysconfig/$BASENAME
 [ -f /etc/default/$BASENAME ] && . /etc/default/$BASENAME
 
+JAVA_OPTS="-Xmx$JAVA_MEM_MAX -Xms$JAVA_MEM_MIN $JAVA_OPTS"
 DAEMON=$(which java)
 DAEMON_OPTS="$JAVA_OPTS -jar $JARFILE $SERVICE -f $CONFIG -l $LOGFILE -p $PLUGINS --grok-patterns-path $PATTERNS $ARGS"
 
