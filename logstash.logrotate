@@ -5,4 +5,7 @@
     compress
     delaycompress
     notifempty
+    postrotate
+        /sbin/service logstash-agent restart > /dev/null 2>/dev/null || true
+    endscript
 }
