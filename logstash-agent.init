@@ -28,7 +28,7 @@ JAVA_MEM_MIN="128M"
 JAVA_MEM_MAX="256M"
 START_STOP_OPTS=""
 ARGS=""
-SLEEP=3
+TRIES=5
 
 [ -f /etc/sysconfig/$BASENAME ] && . /etc/sysconfig/$BASENAME
 [ -f /etc/default/$BASENAME ] && . /etc/default/$BASENAME
@@ -60,9 +60,12 @@ __start() {
 
     if test -z "$DAEMON_EXIST" ; then
         su -s /bin/sh -c 'exec "$0" "$@"' $USER -- $DAEMON $DAEMON_OPTS &
-        sleep $SLEEP
 
-        PID=`ps -ef | grep "^$USER" | grep "$JARFILE $SERVICE -f $CONFIG" | awk '{print $2}'`
+        for i in `seq 0 $TRIES` ; do
+            PID=`ps -ef | grep "^$USER" | grep "$JARFILE $SERVICE -f $CONFIG" | awk '{print $2}'`
+            test ! -z "$PID" && break
+            sleep 1
+        done
 
         if test "x$PID" = "x" ; then
             echo "logstash failed to start"
@@ -80,13 +83,18 @@ __start() {
 
 __stop() {
     echo -n "Stopping ${BASENAME}: "
+
     if test -z "$DAEMON_EXIST" ; then
         echo "logstash not running"
         RETVAL=0
     else
         kill -15 $DAEMON_PID
-        sleep $SLEEP
-        __check_logstash
+
+        for i in `seq 0 $TRIES` ; do
+            __check_logstash
+            test -z "$DAEMON_EXIST" && break
+            sleep 1
+        done
 
         if test -z "$DAEMON_EXIST" ; then
             echo "logstash stopped successfully"
@@ -112,7 +120,7 @@ __status() {
 }
 
 __usage() {
-    echo "Usage: $BASENAME {start|stop|restart}"
+    echo "Usage: $BASENAME [ start | stop | restart ]"
     RETVAL=1
 }
 
