@@ -49,3 +49,10 @@ Now you should be ready to build logstash with rpmbuild.
     /var/log/logstash/agent.conf
 
 Have fun!
+
+## Repository
+
+If you are looking for a repository with ready made RPMs for Logstash, Elasticsearch and Awesant, then you can use the Bloonix repository.
+
+* <http://download.bloonix.de/centos/6/noarch/>
+
