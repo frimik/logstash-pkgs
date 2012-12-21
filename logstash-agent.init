@@ -47,6 +47,7 @@ if test ! -d "$PIDDIR" ; then
 fi
 
 __check_logstash() {
+    DAEMON_EXIST=""
     if test -e "$PIDFILE" ; then
         DAEMON_PID=$(cat $PIDFILE)
         if test -n "$DAEMON_PID" ; then
