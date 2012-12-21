@@ -121,7 +121,7 @@ __status() {
 }
 
 __usage() {
-    echo "Usage: $BASENAME [ start | stop | restart ]"
+    echo "Usage: $BASENAME [ start | stop | status | restart ]"
     RETVAL=1
 }
 
