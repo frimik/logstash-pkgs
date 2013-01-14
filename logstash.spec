@@ -1,6 +1,6 @@
 Summary: logstash is a tool for managing events and logs.
 Name: logstash
-Version: 1.1.7
+Version: 1.1.8
 Release: 1%{?dist}
 License: Apache 2.0
 Group: System Environment/Daemons
@@ -73,8 +73,10 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(0640, root, root) %{defaults}/logstash-agent
 
 %changelog
+* Mon Jan 14 2013 Jonny Schulz <js@bloonix.de> - 1.1.8-1
+- Logstash 1.1.8 is released.
 * Fri Jan 04 2013 Jonny Schulz <js@bloonix.de> - 1.1.7-1
-- Logstash 1.17 is released.
+- Logstash 1.1.7 is released.
 * Thu Nov 29 2012 Jonny Schulz <js@bloonix.net> - 1.1.5-2
 - Replaced JAVA_MEM with JAVA_MEM_MIN and JAVA_MEM_MAX.
 * Thu Nov 13 2012 Jonny Schulz <js@bloonix.net> - 1.1.5-1
