@@ -1,6 +1,6 @@
 Summary: logstash is a tool for managing events and logs.
 Name: logstash
-Version: 1.1.8
+Version: 1.1.9
 Release: 1%{?dist}
 License: Apache 2.0
 Group: System Environment/Daemons
@@ -73,6 +73,8 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(0640, root, root) %{defaults}/logstash-agent
 
 %changelog
+* Tue Jan 15 2013 Jonny Schulz <js@bloonix.de> - 1.1.9-1
+- Logstash 1.1.9 is released.
 * Mon Jan 14 2013 Jonny Schulz <js@bloonix.de> - 1.1.8-1
 - Logstash 1.1.8 is released.
 * Fri Jan 04 2013 Jonny Schulz <js@bloonix.de> - 1.1.7-1
